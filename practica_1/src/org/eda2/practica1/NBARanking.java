@@ -66,17 +66,3 @@ public class NBARanking {
 		return playerData;
 	}
 }
-
-//for (Player player : playerData) {
-//if (player.getPlayerName().toLowerCase().equals(attributes[2].toLowerCase())) {
-//	playerTeams.add(attributes[6]);
-//player.setTeams(playerTeams);
-//
-//ArrayList<String> playerPositions = player.getPositions();
-//playerPositions.add(attributes[5]);
-//player.setPositions(playerPositions);
-//
-//player.setScore(player.getScore() + score);
-//	break;
-//}
-//}
