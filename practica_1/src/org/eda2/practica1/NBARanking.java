@@ -51,14 +51,14 @@ public class NBARanking {
 					playerTeams.add(attributes[6]);
 					player.setTeams(playerTeams);
 				}
-				
+
 				ArrayList<String> playerPositions = player.getPositions();
 				if (!playerPositions.contains(position)) {
 					playerPositions.add(attributes[5]);
 					player.setPositions(playerPositions);
 				}
-				
-				player.setScore(player.getScore() + score);
+
+				player.setScore((player.getScore() + score) / 2);
 
 				playerData.get(index).AddData(player);
 			}
