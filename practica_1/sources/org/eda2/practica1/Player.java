@@ -18,8 +18,15 @@ public class Player {
 		this.positions.add(position);
 		this.score = score;
 	}
+	
+	public Player(Player player) {
+		this.playerName = player.getPlayerName();
+		this.teams = player.getTeams();
+		this.positions = player.getPositions();
+		this.score = player.score;
+	}
 
-	public void AddData(Player player) {
+	public void SetData(Player player) {
 		this.playerName = player.getPlayerName();
 		this.teams = player.getTeams();
 		this.positions = player.getPositions();
