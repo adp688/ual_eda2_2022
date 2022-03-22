@@ -1,5 +1,8 @@
 package org.eda2.practica1;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,15 +18,15 @@ public class NBARanking {
 
 		ArrayList<Player> playerList = parseData(CsvReader.readBooksFromCSV(FILENAME));
 
-		mergeSort(playerList);
+		writeToFile(playerList, "listaNoOrdenada");
+		sort(playerList);
+		writeToFile(playerList, "listaOrdenada");
 
-		//Full Ranking imprime la lista completa, top ranking solo del 1 al 10.
-		
-		// printFullRanking(playerList);
+		// Full Ranking imprime la lista completa, top ranking solo del 1 al 10.
 		printTopRanking(playerList);
 	}
 
-	public static void mergeSort(ArrayList<Player> playerList) {
+	public static void sort(ArrayList<Player> playerList) {
 		if (playerList.isEmpty()) {
 			System.out.println("Array vacio");
 		}
@@ -31,23 +34,19 @@ public class NBARanking {
 		Player[] playerArray = new Player[playerList.size()];
 		playerList.toArray(playerArray);
 
-		mergeSort(playerArray, 0, playerArray.length - 1);
-
-//		for (Player player : playerArray) {
-//			System.out.println(player.toString());
-//		}
+		sort(playerArray, 0, playerArray.length - 1);
 
 		playerList.clear();
 		playerList.addAll(Arrays.asList(playerArray));
 	}
 
-	public static void mergeSort(Player[] player, int left, int right) {
+	public static void sort(Player[] player, int left, int right) {
 		if (left < right) {
 			int middle = left + (right - left) / 2;
-			// System.out.println(left + "L, " + right + "R");
+
 			// ordena la primera y segunda mitad.
-			mergeSort(player, left, middle);
-			mergeSort(player, middle + 1, right);
+			sort(player, left, middle);
+			sort(player, middle + 1, right);
 
 			// une las dos en una sola ordenandolas.
 			merge(player, left, middle, right);
@@ -64,19 +63,17 @@ public class NBARanking {
 		// Copiar player[] a cada lado de los arrays.
 		for (int i = 0; i < nL; ++i) {
 			leftArray[i] = new Player(player[left + i]);
-			// System.out.println(leftArray[i].toString());
 		}
 		for (int i = 0; i < nR; ++i) {
 			rightArray[i] = new Player(player[middle + 1 + i]);
-			// System.out.println(rightArray[i].toString());
 		}
-		// System.out.println("- - - - - - -");
+
 		int index = left;
 		int leftIndex = 0;
 		int rightIndex = 0;
 
 		while (leftIndex < nL && rightIndex < nR) {
-			if (leftArray[leftIndex].getScore() < rightArray[rightIndex].getScore()) {
+			if (leftArray[leftIndex].getScore() > rightArray[rightIndex].getScore()) {
 				player[index] = new Player(leftArray[leftIndex]);
 				leftIndex++;
 			} else {
@@ -86,38 +83,27 @@ public class NBARanking {
 			index++;
 		}
 		while (leftIndex < nL) {
-			player[index].SetData(leftArray[leftIndex]);
+			player[index] = new Player(leftArray[leftIndex]);
 			leftIndex++;
 			index++;
 		}
 		while (rightIndex < nR) {
-			player[index].SetData(rightArray[rightIndex]);
+			player[index] = new Player(rightArray[rightIndex]);
 			rightIndex++;
 			index++;
 		}
-
-//		for (int i = left; i <= right; i++) {
-//			System.out.println("#" + i + player[i].toString());
-//		}
-//		System.out.println("- - - - - - -");
-	}
-
-	public static void printFullRanking(ArrayList<Player> playerList) {
-		for (int i = 0; i < playerList.size(); ++i)
-			System.out.print("\n#" + i + ": " + playerList.get(i).toString());
-		System.out.println();
 	}
 
 	public static void printTopRanking(ArrayList<Player> playerList) {
 		int c = 1;
-		for (int i = playerList.size() - 1; i > playerList.size() - 11; --i) {
+		for (int i = 0; i < 10; ++i) {
 			System.out.print("\n#" + c + ": " + playerList.get(i).toString());
 			c++;
 		}
 		System.out.println();
 	}
 
-	private static ArrayList<Player> parseData(ArrayList<String> data) {
+	public static ArrayList<Player> parseData(ArrayList<String> data) {
 		ArrayList<Player> playerData = new ArrayList<>();
 
 		for (String element : data) {
@@ -158,9 +144,23 @@ public class NBARanking {
 
 				player.setScore((player.getScore() + score) / 2);
 
-				playerData.get(index).SetData(player);
+				playerData.set(index, player);
 			}
 		}
 		return playerData;
+	}
+
+	private static void writeToFile(ArrayList<Player> playerList, String filename) {
+		try {
+			PrintStream filestream = new PrintStream(new File(filename + ".txt"));
+			for (Player player : playerList) {
+				filestream.println(player.toString());
+			}
+			filestream.close();
+			System.out.println("Successfully wrote to the file " + filename + ".txt");
+		} catch (IOException e) {
+			System.out.println("An error occurred");
+			e.printStackTrace();
+		}
 	}
 }

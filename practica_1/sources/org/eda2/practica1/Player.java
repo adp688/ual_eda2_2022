@@ -1,6 +1,5 @@
 package org.eda2.practica1;
 
-
 import java.util.ArrayList;
 
 public class Player {
@@ -18,7 +17,14 @@ public class Player {
 		this.positions.add(position);
 		this.score = score;
 	}
-	
+
+	public Player(String playerName, ArrayList<String> teams, ArrayList<String> positions, int score) {
+		this.playerName = playerName;
+		this.teams = teams;
+		this.positions = positions;
+		this.score = score;
+	}
+
 	public Player(Player player) {
 		this.playerName = player.getPlayerName();
 		this.teams = player.getTeams();
@@ -26,12 +32,12 @@ public class Player {
 		this.score = player.score;
 	}
 
-	public void SetData(Player player) {
-		this.playerName = player.getPlayerName();
-		this.teams = player.getTeams();
-		this.positions = player.getPositions();
-		this.score = player.score;
-	}
+//	public void SetData(Player player) {
+//		this.playerName = player.getPlayerName();
+//		this.teams = player.getTeams();
+//		this.positions = player.getPositions();
+//		this.score = player.score;
+//	}
 
 	public String getPlayerName() {
 		return this.playerName;
