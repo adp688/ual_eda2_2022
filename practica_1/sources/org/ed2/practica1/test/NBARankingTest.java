@@ -38,7 +38,6 @@ public class NBARankingTest {
 		NBARanking.sort(playerList);
 		writeToFile(playerList, "listaOrdenada");
 
-		// Full Ranking imprime la lista completa, top ranking solo del 1 al 10.
 		printTopRanking(playerList);
 	}
 
