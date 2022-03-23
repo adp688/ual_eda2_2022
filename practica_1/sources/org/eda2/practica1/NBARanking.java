@@ -1,30 +1,9 @@
 package org.eda2.practica1;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NBARanking {
-
-	private static final String PATH = System.getProperty("user.dir") + "\\";
-
-	public static void main(String[] args) {
-
-		String FILENAME = PATH + "NbaStats.csv";
-
-		System.out.println(FILENAME);
-
-		ArrayList<Player> playerList = parseData(CsvReader.readBooksFromCSV(FILENAME));
-
-		writeToFile(playerList, "listaNoOrdenada");
-		sort(playerList);
-		writeToFile(playerList, "listaOrdenada");
-
-		// Full Ranking imprime la lista completa, top ranking solo del 1 al 10.
-		printTopRanking(playerList);
-	}
 
 	public static void sort(ArrayList<Player> playerList) {
 		if (playerList.isEmpty()) {
@@ -93,16 +72,7 @@ public class NBARanking {
 			index++;
 		}
 	}
-
-	public static void printTopRanking(ArrayList<Player> playerList) {
-		int c = 1;
-		for (int i = 0; i < 10; ++i) {
-			System.out.print("\n#" + c + ": " + playerList.get(i).toString());
-			c++;
-		}
-		System.out.println();
-	}
-
+	
 	public static ArrayList<Player> parseData(ArrayList<String> data) {
 		ArrayList<Player> playerData = new ArrayList<>();
 
@@ -112,7 +82,10 @@ public class NBARanking {
 			String name = attributes[2];
 			String team = attributes[6];
 			String position = attributes[5];
-			int score = Integer.parseInt(attributes[8].replace(",", ""));
+			double fg = 0;
+			if (!attributes[7].isEmpty())
+				fg = Double.parseDouble(attributes[7].replaceAll(",", "."));
+			int score = (int) (Integer.parseInt(attributes[8]) * fg) / 100;
 
 			// Checkear si esta dentro.
 			int index = -1;
@@ -150,17 +123,14 @@ public class NBARanking {
 		return playerData;
 	}
 
-	private static void writeToFile(ArrayList<Player> playerList, String filename) {
-		try {
-			PrintStream filestream = new PrintStream(new File(filename + ".txt"));
-			for (Player player : playerList) {
-				filestream.println(player.toString());
-			}
-			filestream.close();
-			System.out.println("Successfully wrote to the file " + filename + ".txt");
-		} catch (IOException e) {
-			System.out.println("An error occurred");
-			e.printStackTrace();
+	public static ArrayList<Player> generateRandomPlayerList(int size) {
+		ArrayList<Player> playerList = new ArrayList<Player>();
+
+		for (int i = 0; i < size; i++) {
+			Player player = new Player("Player", "Team" + String.valueOf(Math.random() * 10),
+					String.valueOf(Math.random() * 26), (int) Math.random() * 2000);
+			playerList.add(player);
 		}
+		return playerList;
 	}
 }
