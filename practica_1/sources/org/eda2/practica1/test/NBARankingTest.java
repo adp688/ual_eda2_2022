@@ -1,4 +1,4 @@
-package org.ed2.practica1.test;
+package org.eda2.practica1.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,9 +6,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.eda2.practica1.CsvReader;
-import org.eda2.practica1.NBARanking;
-import org.eda2.practica1.Player;
+import org.eda2.practica1.src.CsvReader;
+import org.eda2.practica1.src.NBARanking;
+import org.eda2.practica1.src.Player;
 
 public class NBARankingTest {
 	private static final String PATH = System.getProperty("user.dir") + "\\";

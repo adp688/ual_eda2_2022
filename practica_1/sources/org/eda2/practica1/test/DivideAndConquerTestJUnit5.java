@@ -1,4 +1,4 @@
-package org.ed2.practica1.test;
+package org.eda2.practica1.test;
 
 import static org.junit.Assert.*;
 
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.eda2.practica1.CsvReader;
-import org.eda2.practica1.NBARanking;
-import org.eda2.practica1.Player;
+import org.eda2.practica1.src.CsvReader;
+import org.eda2.practica1.src.NBARanking;
+import org.eda2.practica1.src.Player;
 import org.junit.Before;
 import org.junit.Test;
 
