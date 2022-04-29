@@ -1,68 +1,70 @@
 package org.eda2.practica2.src;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Prim {
 
-	static void primMST(Grafo grafo) {
+	private static HashMap<String, String> heap = new HashMap<String, String>();
+	private static HashMap<String, Double> weight = new HashMap<String, Double>();
 
-		TreeMap<String, String> MST = new TreeMap<String, String>();
+	public static HashMap<String, ArrayList<String>> mst(Grafo grafo) {
 
-		Set<String> set = grafo.adjMap.keySet();
-		for (String i : set) {
-			grafo.addHeap(i, Integer.MAX_VALUE);
+		HashSet<String> remain = new HashSet<String>();
+		for (String v : grafo.map.keySet())
+			remain.add(v);
+		remain.remove(grafo.getOrigen());
+
+		heap.clear();
+		weight.clear();
+		for (String v : remain) {
+			Double w = grafo.getWeight(grafo.getOrigen(), v);
+			if (w != null) {
+				heap.put(v, grafo.getOrigen());
+				weight.put(v, w);
+			} else {
+				heap.put(v, null);
+				weight.put(v, Double.MAX_VALUE);
+			}
 		}
 
-		while (grafo.heap.size() != 0) {
-			String minEdgeVertex = grafo.minKey(); // get the vertex with minimum edge in the heap
-			grafo.heap.remove(minEdgeVertex); // node removed from heap and its moves to the Set s.
+		heap.put(grafo.getOrigen(), grafo.getOrigen());
+		weight.put(grafo.getOrigen(), 0.0);
 
-			TreeMap<String, Integer> tree = grafo.adjMap.get(minEdgeVertex);
-			for (Entry<String, Integer> entry : tree.entrySet()) {
-				if ((grafo.heap.containsKey(entry.getKey())) && (entry.getValue() < Integer.MAX_VALUE)) {
-					grafo.heap.put(entry.getKey(), entry.getValue()); // decreasing node value
-					MST.put(entry.getKey(), minEdgeVertex);
+		HashMap<String, ArrayList<String>> resultado = new HashMap<String, ArrayList<String>>();
+		while (!remain.isEmpty()) {
+			// Obtenemos el valor minimo
+			double minValue = Double.MAX_VALUE;
+			String minKey = "";
+			for (String v : remain) {
+				double w = weight.get(v);
+				if (w < minValue) {
+					minValue = w;
+					minKey = v;
+				}
+			}
+
+			if (minKey.isEmpty())
+				break;
+
+			remain.remove(minKey);
+
+			// Añadir resultado
+			String origen = heap.get(minKey);
+			if (!resultado.containsKey(origen)) {
+				resultado.put(origen, new ArrayList<String>());
+			}
+			resultado.get(origen).add(minKey);
+
+			for (String v : remain) {
+				Double w = grafo.getWeight(minKey, v);
+				if (w != null && w < weight.get(v)) {
+					weight.put(v, w);
+					heap.put(v, minKey);
 				}
 			}
 		}
-		printMST(MST);
-
-		long cost = MSTCost(MST, grafo);
-		System.out.println("\n\tCost is :" + cost);
+		return resultado;
 	}
-
-	private static long MSTCost(TreeMap<String, String> mST, Grafo grafo) {
-		Set<Entry<String, String>> set = mST.entrySet();
-
-		long sum = 0;
-		for (Entry<String, String> entry : set) {
-
-			String key = entry.getKey();
-			String value = entry.getValue();
-
-			TreeMap<String, Integer> tree = grafo.adjMap.get(value);
-			if (tree != null) {
-				for (Entry<String, Integer> adjMapEntry : tree.entrySet()) {
-					if (adjMapEntry.getKey() == key) {
-						sum += adjMapEntry.getValue();
-					}
-				}
-			}
-		}
-		return sum;
-	}
-
-	private static void printMST(TreeMap<String, String> MST) {
-
-		System.out.println("\nMST is : ");
-		Set<Entry<String, String>> set = MST.entrySet();
-
-		for (Entry<String, String> entry : set) {
-			System.out.println("\t" + entry.getKey() + " -- " + entry.getValue());
-		}
-	}
-
 }
