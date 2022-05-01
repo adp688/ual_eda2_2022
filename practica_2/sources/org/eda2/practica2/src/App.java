@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.Map.Entry;
 
-public class EDAland {
+public class App {
 
 	private static Grafo grafo;
 
@@ -44,7 +44,7 @@ public class EDAland {
 		if (filename.isEmpty()) {
 			System.out.println("Selecciona el tamaño del grafo:");
 			input = sc.nextInt();
-			grafo = new Grafo(input, 1);
+			grafo = new Grafo(input);
 		} else {
 			System.out.println(DATASET_PATH);
 			grafo = new Grafo(DATASET_PATH + filename);
@@ -62,7 +62,7 @@ public class EDAland {
 			break;
 
 		case 1:
-			resultado = PrimPQ.mst(grafo);
+			resultado = Prim.mstPQ(grafo);
 			break;
 
 		case 2:

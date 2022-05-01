@@ -21,16 +21,40 @@ public class Grafo {
 		this.size = this.map.size();
 	}
 
-	public Grafo(int numVertices, int numAristas) {
-		generarGrafo(numVertices, numAristas);
+	public Grafo(int numVertices) {
+		generarGrafo(numVertices);
 		this.size = this.map.size();
 	}
 
-	private void generarGrafo(int numVertices, int numAristas) {
-
+	public void generarGrafo(int numVertices) {
+		map.clear();
+		// La key es el indice, el value es el numero de enlaces
+		HashMap<Integer, Integer> nodes = new HashMap<Integer, Integer>();
+		HashSet<Integer> remain = new HashSet<Integer>();
+		for (int i = 0; i < numVertices; i++) {
+			nodes.put(i, 0);
+			remain.add(i);
+		}
+		Random r = new Random();
+		int minAristas = numVertices - 1;//Número minimo de aristas para un grafo conexo
+		int maxAristas = numVertices * (numVertices - 1) / 2;//Número máximo de aristas que puede contener el grafo
+		int numAristas = r.nextInt((maxAristas+1)-minAristas) + minAristas;
+		
+//		int index = 0;
+//		while (!remain.isEmpty()) {
+//			int num = 0;
+//			int numEnlaces = nodes.get(index);
+//			if (numEnlaces <= 0) {
+//				num = r.nextInt(6) + 1;
+//			}
+//			while (numEnlaces < numAristas) {
+//				int indexVecino = 
+//			}
+//		}
 	}
 
-	private void cargarGrafo(String filename) {
+	public void cargarGrafo(String filename) {
+		map.clear();
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line = "";
 			line = br.readLine().trim();
