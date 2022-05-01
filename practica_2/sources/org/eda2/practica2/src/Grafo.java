@@ -3,6 +3,8 @@ package org.eda2.practica2.src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -21,12 +23,12 @@ public class Grafo {
 		this.size = this.map.size();
 	}
 
-	public Grafo(int numVertices) {
-		generarGrafo(numVertices);
+	public Grafo(int numVertices, int densidad) {
+		generarGrafo(numVertices, densidad);
 		this.size = this.map.size();
 	}
 
-	public void generarGrafo(int numVertices) {
+	public void generarGrafo(int numVertices, int densidad) {
 		map.clear();
 		// La key es el indice, el value es el numero de enlaces
 		HashMap<Integer, Integer> nodes = new HashMap<Integer, Integer>();
@@ -36,21 +38,44 @@ public class Grafo {
 			remain.add(i);
 		}
 		Random r = new Random();
-		int minAristas = numVertices - 1;//Número minimo de aristas para un grafo conexo
-		int maxAristas = numVertices * (numVertices - 1) / 2;//Número máximo de aristas que puede contener el grafo
-		int numAristas = r.nextInt((maxAristas+1)-minAristas) + minAristas;
-		
-//		int index = 0;
-//		while (!remain.isEmpty()) {
-//			int num = 0;
-//			int numEnlaces = nodes.get(index);
-//			if (numEnlaces <= 0) {
-//				num = r.nextInt(6) + 1;
-//			}
-//			while (numEnlaces < numAristas) {
-//				int indexVecino = 
-//			}
-//		}
+		int minAristas = numVertices - 1;// Número minimo de aristas para un grafo conexo
+		int maxAristas = numVertices * (numVertices - 1) / 2;// Número máximo de aristas que puede contener el grafo
+		// int numAristas = r.nextInt((maxAristas + 1) - minAristas) + minAristas;
+		int numAristasPorVertice = (maxAristas - minAristas) * densidad / 100;
+
+		int index = 0;
+		while (!remain.isEmpty()) {
+			int n = 1;
+			if (!map.containsKey("" + index))
+				map.put("" + index, new HashMap<String, Double>());
+
+			int numEnlaces = nodes.get(index);
+			while (numEnlaces < numAristasPorVertice) {
+				int indexVecino = (index + n) % numVertices;
+				int nAux = nodes.get(indexVecino);
+				if (nAux >= numAristasPorVertice) {
+					remain.remove(nAux);
+					continue;
+				}
+
+				double weight = r.nextDouble() * 1000;
+				BigDecimal bd = BigDecimal.valueOf(weight);
+				weight = bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+				map.get("" + index).put("" + indexVecino, weight);
+				if (!dirigido) {
+					if (!map.containsKey("" + indexVecino))
+						map.put("" + indexVecino, new HashMap<String, Double>());
+					map.get("" + indexVecino).put("" + index, weight);
+				}
+				nodes.put(indexVecino, nAux++);
+				nodes.put(index, numEnlaces++);
+				n++;
+			}
+			remain.remove(index);
+			index++;
+		}
+
+		origen = "" + 0;
 	}
 
 	public void cargarGrafo(String filename) {

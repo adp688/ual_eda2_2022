@@ -34,6 +34,7 @@ public class App {
 
 		case 3:
 			filename = "";
+			break;
 
 		default:
 			System.out.println("No has elegido ninguna opcion valida");
@@ -41,10 +42,13 @@ public class App {
 			System.exit(0);
 			break;
 		}
+		
 		if (filename.isEmpty()) {
 			System.out.println("Selecciona el tamaño del grafo:");
 			input = sc.nextInt();
-			grafo = new Grafo(input);
+			System.out.println("Selecciona la densidad (%): ");
+			int densidad = sc.nextInt();
+			grafo = new Grafo(input,densidad);
 		} else {
 			System.out.println(DATASET_PATH);
 			grafo = new Grafo(DATASET_PATH + filename);
@@ -76,6 +80,7 @@ public class App {
 			break;
 		}
 		long endNano = System.nanoTime();
+		
 		if (resultado == null) {
 			System.out.println("No hay resultados.");
 		} else {
@@ -90,6 +95,7 @@ public class App {
 			if (input == 1)
 				Display.dibujarGrafo(grafo, resultado);
 		}
+		
 		sc.close();
 	}
 
