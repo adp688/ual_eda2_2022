@@ -1,17 +1,34 @@
 package org.eda2.practica2.src;
 
-import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Map.Entry;
 
-public class Prim {
-	
+public class MST {
+	private static class Edge implements Comparable<Edge> {
+
+		public Edge(String origen, String destino, double weight) {
+			super();
+			this.origen = origen;
+			this.destino = destino;
+			this.weight = weight;
+		}
+
+		@Override
+		public int compareTo(Edge o) {
+			return Double.compare(this.weight, o.weight);
+		}
+
+		public String origen, destino;
+		public double weight;
+	}
+
 	private static HashMap<String, String> heap = new HashMap<String, String>();
 	private static HashMap<String, Double> weight = new HashMap<String, Double>();
 
-	public static HashMap<String, ArrayList<String>> mst(Grafo grafo) {
+	public static HashMap<String, ArrayList<String>> prim(Grafo grafo) {
 
 		HashSet<String> remain = new HashSet<String>();
 		for (String v : grafo.map.keySet())
@@ -69,26 +86,8 @@ public class Prim {
 		}
 		return resultado;
 	}
-	
-	private static class Edge implements Comparable<Edge> {
 
-		public Edge(String origen, String destino, double weight) {
-			super();
-			this.origen = origen;
-			this.destino = destino;
-			this.weight = weight;
-		}
-
-		@Override
-		public int compareTo(Edge o) {
-			return Double.compare(this.weight, o.weight);
-		}
-
-		public String origen, destino;
-		public double weight;
-	}
-	
-	public static HashMap<String, ArrayList<String>> mstPQ(Grafo grafo) {
+	public static HashMap<String, ArrayList<String>> primPQ(Grafo grafo) {
 
 		HashSet<String> remain = new HashSet<String>();
 		for (String v : grafo.map.keySet())
@@ -107,10 +106,8 @@ public class Prim {
 					queue.add(new Edge(origen, destino, entry.getValue()));
 				}
 			}
-			System.out.println("dest: " + destino);
 			Edge edge = null;
 			do {
-				System.out.println("dest: " + destino);
 				edge = queue.poll();
 				destino = edge.destino;
 			} while (!remain.contains(destino));
@@ -126,6 +123,58 @@ public class Prim {
 			origen = destino;
 		}
 
+		return resultado;
+	}
+
+	public static HashMap<String, ArrayList<String>> kruskal(Grafo grafo) {
+
+		HashMap<String, Double> remain = new HashMap<String, Double>();
+		for (String v : grafo.map.keySet())
+			remain.put(v, Double.MAX_VALUE);
+		remain.remove(grafo.getOrigen());
+
+		heap.clear();
+		String minKey = grafo.getOrigen();
+		String to, from;
+		boolean firstLoop = true;
+		HashMap<String, ArrayList<String>> resultado = new HashMap<String, ArrayList<String>>();
+		while (!remain.isEmpty()) {
+			// Obtenemos el valor minimo
+			double minValue = Double.MAX_VALUE;
+			if (firstLoop)
+				firstLoop = false;
+			else
+				minKey = remain.keySet().stream().findFirst().toString();
+
+			for (Entry<String, Double> entry : remain.entrySet()) {
+				if (entry.getValue() < minValue) {
+					minValue = entry.getValue();
+					minKey = entry.getKey();
+				}
+			}
+
+			remain.remove(minKey);
+
+			for (Entry<String, Double> entry : grafo.map.get(minKey).entrySet()) {
+				to = entry.getKey();
+				Double weight = grafo.getWeight(heap.get(to), to);
+
+				weight = (weight == null) ? Double.MAX_VALUE : weight;
+
+				if (remain.containsKey(to) && entry.getValue() < Double.MAX_VALUE && entry.getValue() < weight) {
+					remain.put(to, entry.getValue());
+					heap.put(to, minKey);
+				}
+			}
+		}
+		// Añadir resultado
+		for (Entry<String, String> entry : heap.entrySet()) {
+			to = entry.getKey();
+			from = entry.getValue();
+			if (!resultado.containsKey(from))
+				resultado.put(from, new ArrayList<String>());
+			resultado.get(from).add(to);
+		}
 		return resultado;
 	}
 }

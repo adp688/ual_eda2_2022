@@ -23,12 +23,12 @@ public class Grafo {
 		this.size = this.map.size();
 	}
 
-	public Grafo(int numVertices, int densidad) {
-		generarGrafo(numVertices, densidad);
+	public Grafo(int numVertices, int numAristas) {
+		generarGrafo(numVertices, numAristas);
 		this.size = this.map.size();
 	}
 
-	public void generarGrafo(int numVertices, int densidad) {
+	public void generarGrafo(int numVertices, int numAristas) {
 		map.clear();
 		// La key es el indice, el value es el numero de enlaces
 		HashMap<Integer, Integer> nodes = new HashMap<Integer, Integer>();
@@ -38,11 +38,9 @@ public class Grafo {
 			remain.add(i);
 		}
 		Random r = new Random();
-		int minAristas = numVertices - 1;// Número minimo de aristas para un grafo conexo
-		int maxAristas = numVertices * (numVertices - 1) / 2;// Número máximo de aristas que puede contener el grafo
-		// int numAristas = r.nextInt((maxAristas + 1) - minAristas) + minAristas;
-		int numAristasPorVertice = (maxAristas - minAristas) * densidad / 100;
 
+		this.numV = numVertices;
+		this.numA = numAristas * numVertices;
 		int index = 0;
 		while (!remain.isEmpty()) {
 			int n = 1;
@@ -50,10 +48,10 @@ public class Grafo {
 				map.put("" + index, new HashMap<String, Double>());
 
 			int numEnlaces = nodes.get(index);
-			while (numEnlaces < numAristasPorVertice) {
+			while (numEnlaces < numAristas) {
 				int indexVecino = (index + n) % numVertices;
 				int nAux = nodes.get(indexVecino);
-				if (nAux >= numAristasPorVertice) {
+				if (nAux >= numAristas) {
 					remain.remove(nAux);
 					continue;
 				}

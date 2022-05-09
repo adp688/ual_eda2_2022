@@ -22,7 +22,7 @@ public class Display {
 		for (String i : set) {
 			Node n = graph.addNode(i);
 			n.setAttribute("ui.label", i);
-			if (i.contains(grafo.getOrigen())) {
+			if (i.contentEquals(grafo.getOrigen())) {
 				n.setAttribute("ui.style", "fill-color: rgb(0,100,255);");
 			} else {
 				n.setAttribute("ui.style", "fill-color: rgb(0,0,0);");
