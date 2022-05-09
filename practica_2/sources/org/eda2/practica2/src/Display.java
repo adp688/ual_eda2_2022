@@ -10,7 +10,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 public class Display {
 
-	static final String nodestyle = "node {" + "	size: 20px;" + "	text-background-mode:plain;"
+	static final String nodestyle = "node {" + "	size: 5px;" + "	text-background-mode:plain;"
 			+ "	text-alignment:under;" + "	text-style:bold;" + "}";
 
 	public static void dibujarGrafo(Grafo grafo, HashMap<String, ArrayList<String>> results) {

@@ -172,11 +172,11 @@ public class App {
 			pow++;
 		}
 
-		System.out.println("\n" + "Resultados Prim:" + "\n");
+		System.out.println("\n" + "Resultados Prim:");
 		System.out.println(primResults);
-		System.out.println("\n" + "Resultados PrimPQ:" + "\n");
+		System.out.println("\n" + "Resultados PrimPQ:");
 		System.out.println(primPQResults);
-		System.out.println("\n" + "Resultados Kruskal:" + "\n");
+		System.out.println("\n" + "Resultados Kruskal:");
 		System.out.println(kruskalResults);
 		System.exit(0);
 	}
