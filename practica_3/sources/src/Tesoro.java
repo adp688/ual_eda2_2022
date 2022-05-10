@@ -1,4 +1,4 @@
-package org.eda2.practica3.src;
+package src;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

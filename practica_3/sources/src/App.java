@@ -1,4 +1,4 @@
-package org.eda2.practica3.src;
+package src;
 
 public class App {
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package org.eda2.practica1.src;
+package src;
 
 import java.util.ArrayList;
 

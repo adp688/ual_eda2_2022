@@ -1,4 +1,4 @@
-package org.eda2.practica2.src;
+package src;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

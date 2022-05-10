@@ -1,4 +1,4 @@
-package org.eda2.practica1.test;
+package test;
 
 import static org.junit.Assert.*;
 
@@ -6,14 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.eda2.practica1.src.CsvReader;
-import org.eda2.practica1.src.NBARanking;
-import org.eda2.practica1.src.Player;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
+
+import src.CsvReader;
+import src.NBARanking;
+import src.Player;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DivideAndConquerTestJUnit5 {
