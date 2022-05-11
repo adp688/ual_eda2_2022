@@ -1,13 +1,11 @@
-package src;
+package org.eda2.practica3;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Tesoro implements Comparable<Tesoro> {
 
-	public static ArrayList<Tesoro> tesoros;
-	private static int size;
+	private static int count = 0;
 
 	private String nombre;
 	private int ID;
@@ -19,7 +17,7 @@ public class Tesoro implements Comparable<Tesoro> {
 		this.nombre = nombre;
 		this.peso = peso;
 		this.valor = valor;
-		this.ID = size++;
+		this.ID = count++;
 	}
 
 	public Tesoro(double peso, double valor) {
@@ -27,7 +25,7 @@ public class Tesoro implements Comparable<Tesoro> {
 		this.nombre = generarNombre();
 		this.peso = peso;
 		this.valor = valor;
-		this.ID = size++;
+		this.ID = count++;
 	}
 
 	public String getNombre() {
@@ -36,6 +34,10 @@ public class Tesoro implements Comparable<Tesoro> {
 
 	public double getPeso() {
 		return peso;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
 
 	public double getValor() {
@@ -56,10 +58,10 @@ public class Tesoro implements Comparable<Tesoro> {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.##");
 
-		String str ="";
+		String str = "";
 		str += "\n\t" + this.nombre;
 		str += "\n\tID:" + this.ID;
-		str +="\n\t";
+		str += "\n\t";
 		for (int i = 0; i < 32; i++)
 			str += "-";
 		str += "\n\t|  Peso: " + df.format(this.peso) + " | Valor: " + df.format(this.valor) + "  |";
