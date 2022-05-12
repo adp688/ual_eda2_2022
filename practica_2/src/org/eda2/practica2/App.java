@@ -161,7 +161,7 @@ public class App {
 			start = System.currentTimeMillis();
 			MST.primPQ(grafo);
 			end = System.currentTimeMillis();
-			primPQResults += "\n" + numVertices + ";" + ((end - start) <= 0 ? 1 : (end - start));
+			primPQResults += "\n" + numVertices + ";" + ((end - start) <= 0 ? 1 + "<" : (end - start));
 
 			// kruskal:
 			start = System.currentTimeMillis();

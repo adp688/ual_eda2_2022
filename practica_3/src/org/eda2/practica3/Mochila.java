@@ -2,41 +2,88 @@ package org.eda2.practica3;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Mochila.
+ */
 public class Mochila {
+
+	/** The inventario. */
 	private static ArrayList<Tesoro> inventario = new ArrayList<Tesoro>();
+
+	/** The peso total. */
 	private static double pesoTotal;
+
+	/** The valor total. */
 	private static double valorTotal;
+
+	/** The capacidad. */
 	private static int capacidad;
 
+	/**
+	 * Gets the inventario.
+	 *
+	 * @return the inventario
+	 */
 	public static ArrayList<Tesoro> getInventario() {
 		return inventario;
 	}
 
+	/**
+	 * Gets the peso total.
+	 *
+	 * @return the peso total
+	 */
 	public static double getPesoTotal() {
 		return pesoTotal;
 	}
 
+	/**
+	 * Gets the valor total.
+	 *
+	 * @return the valor total
+	 */
 	public static double getValorTotal() {
 		return valorTotal;
 	}
 
+	/**
+	 * Gets the capacidad.
+	 *
+	 * @return the capacidad
+	 */
 	public static int getCapacidad() {
 		return capacidad;
 	}
 
+	/**
+	 * Sets the capacidad.
+	 *
+	 * @param capacidad the new capacidad
+	 */
 	public static void setCapacidad(int capacidad) {
 		Mochila.capacidad = capacidad;
 	}
 
+	/**
+	 * Max.
+	 *
+	 * @param a the a
+	 * @param b the b
+	 * @return the double
+	 */
 	private static double max(double a, double b) {
 		return (a > b) ? a : b;
 	}
 
+	/**
+	 * Prints the.
+	 */
 	public static void print() {
 		DecimalFormat df = new DecimalFormat("#.##");
-		System.out.println("\n Tesoros dentro de la mochila: ");
+		System.out.println("\n Capacidad de la mochila: " + capacidad);
+		System.out.println(" Tesoros dentro de la mochila: ");
 		for (Tesoro t : inventario) {
 			System.out.println(t.toString());
 		}
@@ -44,11 +91,15 @@ public class Mochila {
 		System.out.println(" La mochila actualmente vale: " + df.format(valorTotal));
 	}
 
+	/**
+	 * Dp integer.
+	 *
+	 * @return the double
+	 */
 	public static double dpInteger() {
-		long startNano;
-		long endNano;
 		if (Cueva.tesoros.isEmpty())
 			return -1;
+		inventario.clear();
 		DecimalFormat df = new DecimalFormat("#.##");
 		System.out.println("\nAlgoritmo DP: ");
 
@@ -58,7 +109,6 @@ public class Mochila {
 		int peso = 0;
 		Tesoro tesoroActual;
 		// Comienzo del Algoritmo
-		startNano = System.nanoTime();
 		for (int i = 0; i <= Cueva.getSize(); i++) {
 			if (i > 0) {
 				tesoroActual = Cueva.tesoros.get(i - 1);
@@ -78,20 +128,20 @@ public class Mochila {
 					dp[i][j] = dp[i - 1][j];
 			}
 		}
-		endNano = System.nanoTime();
-		// Final algoritmo
-		System.out.println("Tiempo de ejecución para algoritmo: " + (endNano - startNano) + " ns " + " o "
-				+ TimeUnit.MILLISECONDS.convert((endNano - startNano), TimeUnit.NANOSECONDS) + " ms.");
 
 		System.out.println("Resultado: " + df.format(dp[Cueva.getSize()][capacidad]));
-		return añadirTesoros(dp);
+		return addTesoros(dp);
 	}
 
+	/**
+	 * Dp infinito integer.
+	 *
+	 * @return the double
+	 */
 	public static double dpInfinitoInteger() {
 		if (Cueva.tesoros.isEmpty())
 			return -1;
-		long startNano;
-		long endNano;
+		inventario.clear();
 		DecimalFormat df = new DecimalFormat("#.##");
 		System.out.println("\nAlgoritmo DP infinito: ");
 
@@ -101,7 +151,6 @@ public class Mochila {
 		int peso = 0;
 		Tesoro tesoroActual;
 		// Comienzo del Algoritmo
-		startNano = System.nanoTime();
 		for (int i = 0; i <= capacidad; i++) {
 			for (int j = 0; j < Cueva.getSize(); j++) {
 				tesoroActual = Cueva.tesoros.get(j);
@@ -112,62 +161,102 @@ public class Mochila {
 					dp[i] = max(valor + dp[i - peso], dp[i]);
 			}
 		}
-		endNano = System.nanoTime();
-		// Final algoritmo
-		System.out.println("Tiempo de ejecución para algoritmo: " + (endNano - startNano) + " ns " + " o "
-				+ TimeUnit.MILLISECONDS.convert((endNano - startNano), TimeUnit.NANOSECONDS) + " ms.");
 
 		System.out.println("Resultado: " + df.format(dp[capacidad]));
-		return añadirTesoros(dp);
+		return addTesoros(dp);
 	}
 
-	public static double greedy() {
-		long startNano;
-		long endNano;
+	/**
+	 * Dp double.
+	 *
+	 * @return the double
+	 */
+	public static double dpDouble() {
 		if (Cueva.tesoros.isEmpty())
 			return -1;
+		inventario.clear();
+		DecimalFormat df = new DecimalFormat("#.##");
+		System.out.println("\nAlgoritmo DP: ");
+
+		double[][] dp = new double[Cueva.getSize() + 1][capacidad + 1];
+
+		double valor = 0;
+		int peso = 0;
+		Tesoro tesoroActual;
+		// Comienzo del Algoritmo
+		for (int i = 0; i <= Cueva.getSize(); i++) {
+			if (i > 0) {
+				tesoroActual = Cueva.tesoros.get(i - 1);
+				valor = tesoroActual.getValor();
+				peso = (int) Math.round(tesoroActual.getPeso());
+			}
+
+			for (int j = 0; j <= capacidad; j++) {
+				if (i == 0 || j == 0) {
+					dp[i][j] = 0;
+					continue;
+				}
+
+				if (peso <= j)
+					dp[i][j] = max(valor + dp[i - 1][j - peso], dp[i - 1][j]);
+				else
+					dp[i][j] = dp[i - 1][j];
+			}
+		}
+
+		System.out.println("Resultado: " + df.format(dp[Cueva.getSize()][capacidad]));
+		return addTesoros(dp);
+	}
+
+	/**
+	 * Greedy.
+	 *
+	 * @return the double
+	 */
+	public static double greedy() {
+		if (Cueva.tesoros.isEmpty())
+			return -1;
+		inventario.clear();
 		DecimalFormat df = new DecimalFormat("#.##");
 		System.out.println("\nAlgoritmo Greedy: ");
 
-		startNano = System.nanoTime();
 		pesoTotal = 0;
 		valorTotal = 0;
-		double[] cantidad = new double[Cueva.getSize()];
 		Tesoro t;
 		for (int i = 0; i < Cueva.getSize(); i++) {
 			t = Cueva.tesoros.get(i);
 			if (pesoTotal + t.getPeso() <= capacidad) {
-				cantidad[i] = 0;
+				t.setCantidad(1);
 				inventario.add(t);
 				valorTotal += t.getValor();
 				pesoTotal += t.getPeso();
 				if (pesoTotal == capacidad)
 					break;
 			} else {
-				cantidad[i] = ((capacidad) - pesoTotal) / t.getPeso();
+				t.setCantidad((capacidad - pesoTotal) / t.getPeso());
 				inventario.add(t);
-				valorTotal += t.getValor() * cantidad[i];
-				pesoTotal += (t.getPeso()) * cantidad[i];
+				valorTotal += t.getValor() * t.getCantidad();
+				pesoTotal += t.getPeso() * t.getCantidad();
 				break;
 			}
 		}
-		endNano = System.nanoTime();
-		// Final algoritmo
-		System.out.println("Tiempo de ejecución para algoritmo: " + (endNano - startNano) + " ns " + " o "
-				+ TimeUnit.MILLISECONDS.convert((endNano - startNano), TimeUnit.NANOSECONDS) + " ms.");
 
 		System.out.println("Resultado: " + df.format(valorTotal));
 		print();
 		return valorTotal;
 	}
 
-	private static double añadirTesoros(double[][] matriz) {
+	/**
+	 * Adds the tesoros.
+	 *
+	 * @param matriz the matriz
+	 * @return the double
+	 */
+	private static double addTesoros(double[][] matriz) {
 		int n = Cueva.getSize();
 		int c = capacidad;
 		pesoTotal = 0;
 		valorTotal = 0;
-
-		inventario.clear();
 
 		Tesoro t;
 		while (n != 0) {
@@ -184,13 +273,17 @@ public class Mochila {
 		return valorTotal;
 	}
 
-	private static double añadirTesoros(double[] array) {
+	/**
+	 * Adds the tesoros.
+	 *
+	 * @param array the array
+	 * @return the double
+	 */
+	private static double addTesoros(double[] array) {
 		int n = Cueva.getSize();
 		int c = capacidad;
 		pesoTotal = 0;
 		valorTotal = 0;
-
-		inventario.clear();
 
 		double pesoMinimo = Cueva.tesoros.get(0).getPeso();
 		Tesoro t;
