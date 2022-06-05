@@ -14,13 +14,53 @@
 		<testSourceDirectory>test</testSourceDirectory>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.4.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<reportOutputDirectory>
+						${project.reporting.outputDirectory}/../../docs
+					</reportOutputDirectory>
+					<doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
+					<docletArtifact>
+						<groupId>nl.talsmasoftware</groupId>
+						<artifactId>umldoclet</artifactId>
+						<version>2.0.16</version>
+					</docletArtifact>
+					<additionalOptions>
+						<!-- Para generar los .png para la memoria, descomentar estas 2 lineas -->
+						<additionalOption>-umlImageDirectory images</additionalOption>
+						<additionalOption>-umlImageFormat png </additionalOption>
+						<additionalOption>-private</additionalOption>
+					</additionalOptions>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+			</plugin>
+
 		</plugins>
 	</build>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/nl.talsmasoftware/umldoclet -->
+		<dependency>
+			<groupId>nl.talsmasoftware</groupId>
+			<artifactId>umldoclet</artifactId>
+			<version>2.0.16</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.graphstream/gs-core -->
+		<dependency>
+			<groupId>org.graphstream</groupId>
+			<artifactId>gs-core</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.graphstream/gs-ui-javafx -->
+		<dependency>
+			<groupId>org.graphstream</groupId>
+			<artifactId>gs-ui-javafx</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
 </project>
